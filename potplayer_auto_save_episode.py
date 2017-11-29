@@ -1,3 +1,7 @@
+'''
+功能：根据potplayer标题名创建存档提示文件
+'''
+
 from win32gui import *
 import time, os
 from difflib import SequenceMatcher
