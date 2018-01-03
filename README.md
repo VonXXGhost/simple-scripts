@@ -10,3 +10,6 @@
 
 ### sakugabooru_search_weibo.user.js
 在sakugabooru页面添加搜索微博账号@sakugabooru中的相关微博的选项。详见[greasyfork页面](https://greasyfork.org/zh-CN/scripts/36101)
+
+### update_notifications.py
+用于win10的网站更新桌面提醒，依赖于win10toast、BeautifulSoup等。COOKIES内填写纯文本格式的cookie。
