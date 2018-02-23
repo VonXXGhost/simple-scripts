@@ -8,8 +8,8 @@ from difflib import SequenceMatcher
 
 titles = []
 anime_path = r'D:\Anime'
-# 排除目录名
-ex_dirs = []
+ex_dirs = []    # 排除目录名
+last_title = None
 
 
 def foo(hwnd, mouse):
@@ -51,12 +51,18 @@ def exe():
     for title in titles:
         if title[-9:] == 'PotPlayer':
             name = title[:-12:]
+            global last_title
+            if name == last_title:
+                return
+            else:
+                last_title = name
             path, last_episode = get_last_episode(name)
             if name == last_episode:
                 return
             save_progress(path, name)
             return
     else:
+        print('running')
         time.sleep(90)
 
 
@@ -67,4 +73,5 @@ if __name__ == '__main__':
         except:
             pass
         titles.clear()
+        print('running')
         time.sleep(10)
