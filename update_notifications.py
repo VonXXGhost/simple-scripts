@@ -14,6 +14,7 @@ from win10toast import ToastNotifier
 
 COOKIES = {
     'ask.fm': '',
+    'bgm.tv': ''
 }
 
 
@@ -51,6 +52,11 @@ class UpdateNotifier:
     def notify_directly(self, title, msg):
         self.notifier.show_toast(title, msg, icon_path="notifications.ico")
 
+    def notify_simply(self, title, msg):
+        if len(msg) > 30:
+            msg = '有新消息'
+        self.notifier.show_toast(title, msg, icon_path="notifications.ico")
+
 
 def txt_to_dic_cookies(txt):
     cookies = {}
@@ -72,9 +78,19 @@ def check_askfm(notifier):
     notifier.md5_check(first_question, 'ask.fm', notifier.notify_directly)
 
 
+def check_bgmtv(notifier):
+    url = 'https://bgm.tv/notify/all'
+    cookies = txt_to_dic_cookies(COOKIES['bgm.tv'])
+    page = requests.get(url, cookies=cookies)
+    soup = BeautifulSoup(page.text, 'lxml')
+    notify_list = soup.find(id='comment_list')
+    notifier.md5_check(notify_list, 'bgm.tv', notifier.notify_simply)
+
+
 def perform_task():
     scheduler.enter(60, 0, perform_task)
     check_askfm(notifier)
+    check_bgmtv(notifier)
 
 
 if __name__ == '__main__':
