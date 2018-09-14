@@ -39,7 +39,7 @@ def send_help(bot, contact):
     help_message = '使用指南：\n在群里at本账号同时附上sakugabooru的稿件链接，本账号将搜索是否存在微博gif数据， ' \
                    '如果存在则发送gif地址到群里（因为协议不支持发图），否则报错。\n如果同一条信息里没有链接， ' \
                    '则会使用聊天记录中最近的一条booru链接（小概率可能会找错，尽量使用第一种方法）。\n ' \
-                   'at时附上"-auto"可开启自动检测链接模式，若需取消附上"-no-auto"即可，默认不开启。' \
+                   'at时附上"-auto"可开启自动检测链接模式，若需取消附上"-no-auto"即可，默认开启。' \
                    '自动模式下不会发送不存在的条目信息和错误信息，同时at模式仍然有效。\n' \
                    'at本账号同时带上"-h"或"-help"可再次获取本帮助。'
     bot.SendTo(contact, help_message)
@@ -50,14 +50,18 @@ def message_process(bot, contact, content, auto_model=False):
     logging.info(''.join(['处理信息：', group_name, ':', content]))
     id = re.findall(r'(?<=post/show/)(\d+)', content)[0]
     if id:
-        response = requests.get(BOT_API_URL_TEMPLATE.format(id))
+        try:
+            response = requests.get(BOT_API_URL_TEMPLATE.format(id))
+        except e:
+            logging.error(e)
+            send_message("服务器出错，请稍后再试", bot, contact)
         if response.status_code == 404 and not auto_model:
             logging.error('404 of ' + id)
             send_message("服务器中暂无此条目数据", bot, contact)
         elif response.status_code == 200:
             try:
                 gif_url = response.json()['weibo']['img_url']
-                if git_url is None:
+                if gif_url is None:
                     raise RuntimeError('no img url')
                 send_gif_url(gif_url, id, bot, contact)
             except:
@@ -94,7 +98,7 @@ def auto_set_process(bot, contact, undo=False):
 def onQQMessage(bot, contact, member, content):
     if 'sakugabooru.com/post/show/' in content:
         PRE_BOORU_ABOUT_MSG[contact.name] = content
-        if AUTO_SETTINGS.get(contact.name, False) and '@ME' not in content:
+        if AUTO_SETTINGS.get(contact.name, True) and '@ME' not in content:
             message_process(bot, contact, content, auto_model=True)
     if '@ME' in content:
         if '-h' in content or '-help' in content:
