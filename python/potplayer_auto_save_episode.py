@@ -72,7 +72,7 @@ def exe():
     else:
         print('无保存')
         if not Pot_flag:
-            time.sleep(90)
+            time.sleep(60)
 
 
 if __name__ == '__main__':
@@ -82,4 +82,4 @@ if __name__ == '__main__':
             exe()
         except:
             pass
-        time.sleep(10)
+        time.sleep(3)
