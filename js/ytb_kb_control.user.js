@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         键盘打开调试信息或只显示预定直播
-// @version      0.1
+// @version      0.2
 // @description  键盘打开调试信息或只显示预定直播
 // @author       VonXXGhost
 // @include        https://www.youtube.com/*
