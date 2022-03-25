@@ -20,7 +20,7 @@ YouTube 键盘打开调试信息或只显示预定直播
 #### bgm_anime_friends_rank.py
 获取统计bangumi好友评分数据
 
-### clean_outdated_file.py
+#### clean_outdated_file.py
 清理指定目录下的过期文件
 
 #### periodic_deposit_manager.py
